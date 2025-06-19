@@ -253,7 +253,10 @@ class CustomerServiceTools:
         """
 
         result = self.db.execute_query(query, (user_id,))
-        if result and len(result) > 0:
+        
+        if result and len(result["data"]) > 0:
+            print("@"*10)
+            print(result)
             return result["data"][0]
         else:
             return None
