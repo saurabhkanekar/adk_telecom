@@ -1,7 +1,8 @@
 import asyncio
 
 # Import the coordinator agent
-from coordinator_agent.agent import coordinator_agent
+from manager.agent import coordinator_agent
+# from coordinator_agent.agent import coordinator_agent
 from dotenv import load_dotenv
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
@@ -26,29 +27,19 @@ session_service = InMemorySessionService()
 #     "plan_id": None,  # Will store the customer's plan ID
 #     "interaction_history": [],  # Will track conversation history
 # }
-__initial_state = {
-    "customer_id": None,  # Will be populated when customer is identified
-    "customer_info": None,  # Will store customer details
-    "plan_id": None,  # Will store the customer's plan ID
-    "plan_name": None,  # Will store the plan name
+__initial_state = {  # Will be populated when customer is identified
+    "customer_info": None,  # Will store customer details  # Will store the plan name
     "plan_details": None,  # Will store detailed plan information
     "interaction_history": [],  # Will track conversation history
 }
 
-
-
-
-
 async def main_async():
     # Setup constants
     APP_NAME = "Airtel Customer Support"
-    USER_ID = "airtel_customer"
-
+    USER_ID = "101"
     # Prefill state with customer information
-    test_phone = "9765822200"
     prefilled_state = copy.deepcopy(__initial_state)
-    initial_state = set_state_info(prefilled_state, phone=test_phone)
-
+    initial_state = set_state_info(prefilled_state, customer_id=USER_ID)
     # ===== PART 3: Session Creation =====
     # Create a new session with initial state
     new_session = session_service.create_session(

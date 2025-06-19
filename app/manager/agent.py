@@ -1,12 +1,14 @@
 from google.adk.agents import Agent
 from config.customer_service_tools import CustomerServiceTools
+import os
 
 # Import the specialized agents
-from .sub_agents.billing_agent.agent import billing_agent
-from .sub_agents.subscription_agent.agent import subscription_agent
+# from .sub_agents.billing_agent.agent import billing_agent
+# from .sub_agents.subscription_agent.agent import subscription_agent
+from .sub_agents.plan_enquiry_agent.agent import plan_enquiry_agent
+from .sub_agents.tech_support_agent.agent import tech_support_agent
 
 from datetime import datetime
-
 
 def get_current_time() -> dict:
     """
@@ -23,7 +25,7 @@ tools = CustomerServiceTools()
 # Create the coordinator agent
 coordinator_agent = Agent(
     name="coordinator_agent",
-    model="gemini-2.0-flash",
+    model="gemini-2.0-flash-exp",#"gemini-2.0-flash",
     description="Coordinator agent for Airtel network provider",
     instruction="""
     You are the primary coordinator agent for Airtel network provider customer service.
@@ -44,15 +46,12 @@ coordinator_agent = Agent(
 
     **Customer Information:**
     <customer_info>
-    Customer ID: {customer_info.customer_id}
-    Name: {customer_info.first_name} {customer_info.last_name}
-    Email: {customer_info.email}
-    Phone: {customer_info.phone}
+    Customer info: {customer_info}
     </customer_info>
 
-    **Subscription Information:**
+    **User Current Subscription Information:**
     <subscription_info>
-    Plan ID: {plan_id}
+    Current plan info: {plan_details} 
     </subscription_info>
 
     **Interaction History:**
@@ -62,15 +61,16 @@ coordinator_agent = Agent(
 
     You have access to the following specialized agents:
 
-    1. Billing Agent
-       - For questions about invoices, payments, and billing-related issues
-       - Direct billing-related queries here
-       - This agent can provide invoice details and payment history
-
-    2. Subscription Agent
-       - For questions about plans, subscriptions, and plan features
-       - Handles plan inquiries and recommendations
-       - This agent can provide subscription details and available plans
+    1. Plan/Addon enquiry Agnet
+       - Provide information about available plans and addons
+       - Compare different plans and addons
+       - Recommend plans and addons based on customer needs
+       - Explain plan and addons features like data limits, voice minutes, SMS allowance and duration
+    
+    2. Tech support(comlpaint) Agent:
+       - Provide information about previous raised complaints
+       - Create new complaint on behalf of the user
+       - Update/chaneg a complaint(ticket) status
 
     Tailor your responses based on the customer's information and previous interactions.
     Always When the customer hasn't been identified yet, ask for their phone number or email to look them up.
@@ -84,7 +84,7 @@ coordinator_agent = Agent(
     ask clarifying questions to better understand the customer's needs.
 
     """,
-    sub_agents=[billing_agent, subscription_agent],
+    sub_agents=[plan_enquiry_agent, tech_support_agent],
     tools=[
         #tools.find_customer_by_phone,
         #tools.find_customer_by_email,

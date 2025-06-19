@@ -1,10 +1,12 @@
 import asyncio
 import base64
+import copy
 import json
 import os
 from pathlib import Path
 from typing import AsyncIterable
 
+import google.generativeai as genai
 from dotenv import load_dotenv
 from fastapi import FastAPI, Query, WebSocket
 from fastapi.responses import FileResponse
@@ -13,10 +15,13 @@ from google.adk.agents import LiveRequestQueue
 from google.adk.agents.run_config import RunConfig
 from google.adk.events.event import Event
 from google.adk.runners import Runner
-from google.adk.sessions.in_memory_session_service import InMemorySessionService
+from google.adk.sessions.in_memory_session_service import \
+    InMemorySessionService
 from google.genai import types
 #from jarvis.agent import root_agent
-from manager.agent import root_agent
+from manager.agent import coordinator_agent
+from setup_state import set_state_info
+
 #
 # ADK Streaming
 #
@@ -24,24 +29,31 @@ from manager.agent import root_agent
 # Load Gemini API Key
 load_dotenv()
 
-APP_NAME = "ADK Streaming example"
+APP_NAME = "Airtel Customer Support"
+USER_ID = "101"
+__initial_state = {  # Will be populated when customer is identified
+    "customer_info": None,  # Will store customer details  # Will store the plan name
+    "plan_details": None,  # Will store detailed plan information
+    "interaction_history": [],  # Will track conversation history
+}
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 session_service = InMemorySessionService()
-
 
 def start_agent_session(session_id, is_audio=False):
     """Starts an agent session"""
-
+    prefilled_state = copy.deepcopy(__initial_state)
+    initial_state = set_state_info(prefilled_state, customer_id=USER_ID)
     # Create a Session
     session = session_service.create_session(
         app_name=APP_NAME,
         user_id=session_id,
-        session_id=session_id,
+        state=initial_state,
     )
 
     # Create a Runner
     runner = Runner(
         app_name=APP_NAME,
-        agent=root_agent,
+        agent=coordinator_agent,    #root_agent
         session_service=session_service,
     )
 

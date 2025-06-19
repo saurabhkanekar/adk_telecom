@@ -11,7 +11,7 @@ class DatabaseConfig:
             "host": "ep-billowing-salad-a8vln0qo-pooler.eastus2.azure.neon.tech",
             "user": "neondb_owner",
             "port": 5432,
-            "database": "neondb",
+            "database": "new_db_telecom",
             "password": "npg_HyTzNd9bop2S",
             "sslmode": "require"
         }
@@ -58,6 +58,32 @@ class DatabaseConfig:
             conn.rollback()
             return {"error": str(e)}
 
+        finally:
+            conn.close()
+
+    def execute_update(self, query: str, params: tuple) -> bool:
+        """
+        Executes an INSERT, UPDATE, or DELETE query.
+
+        Args:
+            query (str): SQL query with placeholders (%s).
+            params (tuple): Parameters for the query.
+
+        Returns:
+            bool: True if executed successfully, False otherwise.
+        """
+        conn = self.get_connection()
+        if not conn:
+            return {"error": "Database connection failed"}
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute(query, params)
+            conn.commit()
+            return True
+        except Exception as e:
+            conn.rollback()
+            print(f"❌ Error executing update: {e}")
+            return False
         finally:
             conn.close()
 
