@@ -473,6 +473,42 @@ async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "service": "Airtel Customer Support Chat"}
 
+from fastapi import  Depends
+from typing import Optional
+from config.database_config import DatabaseConfig  # Update with your actual module
+from fastapi.responses import JSONResponse
+
+db = DatabaseConfig()
+
+@app.get("/conversation_analytics")
+def fetch_conversation_analytics(
+    user_id: Optional[str] = Query(None, description="Filter by user ID"),
+    intent: Optional[str] = Query(None, description="Filter by intent type")
+):
+    base_query = "SELECT * FROM conversation_analytics"
+    filters = []
+    params = []
+
+    # Add WHERE clauses conditionally
+    if user_id:
+        filters.append("user_id = %s")
+        params.append(user_id)
+
+    if intent:
+        filters.append("intent::text ILIKE %s")
+        params.append(f"%{intent}%")  # Allow partial matches (e.g., "Tech")
+
+    if filters:
+        base_query += " WHERE " + " AND ".join(filters)
+
+    base_query += " ORDER BY datetime DESC"
+
+    result = db.execute_query(base_query, tuple(params))
+    if "error" in result:
+        return JSONResponse(status_code=500, content={"error": result["error"]})
+
+    return result
+
 
 if __name__ == "__main__":
     import uvicorn
