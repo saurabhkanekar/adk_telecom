@@ -1,7 +1,7 @@
 from google.adk.agents import Agent
 from config.customer_service_tools import CustomerServiceTools
 import os
-
+from dotenv import load_dotenv
 # Import the specialized agents
 # from .sub_agents.billing_agent.agent import billing_agent
 # from .sub_agents.subscription_agent.agent import subscription_agent
@@ -25,7 +25,7 @@ tools = CustomerServiceTools()
 # Create the coordinator agent
 coordinator_agent = Agent(
     name="coordinator_agent",
-    model="gemini-2.0-flash-exp",#"gemini-2.0-flash",
+    model=os.getenv("LLM_MODEL"),
     description="Coordinator agent for Airtel network provider",
     instruction="""
     You are the primary coordinator agent for Airtel network provider customer service.
