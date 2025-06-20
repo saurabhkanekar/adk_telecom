@@ -1,13 +1,15 @@
 from google.adk.agents import Agent
 from config.customer_service_tools import CustomerServiceTools
 
+import os
+from dotenv import load_dotenv
 # Initialize the tools
 tools = CustomerServiceTools()
 
 # Create the billing agent
 billing_agent = Agent(
     name="billing_agent",
-    model="gemini-2.0-flash",
+    model= os.getenv("LLM_MODEL"),
     description="Billing agent for Airtel network provider",
     instruction="""
     You are the billing agent for Airtel network provider.

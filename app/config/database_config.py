@@ -4,16 +4,20 @@ import os
 from typing import Dict, Any
 from datetime import datetime
 import json
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class DatabaseConfig:
     def __init__(self):
         self.connection_params = {
-            "host": "ep-billowing-salad-a8vln0qo-pooler.eastus2.azure.neon.tech",
-            "user": "neondb_owner",
-            "port": 5432,
-            "database": "new_db_telecom",
-            "password": "npg_HyTzNd9bop2S",
-            "sslmode": "require"
+            "host": os.getenv("DB_HOST"),
+            "user": os.getenv("DB_USER"),
+            "port": int(os.getenv("DB_PORT", 5432)),
+            "database": os.getenv("DB_NAME"),
+            "password": os.getenv("DB_PASSWORD"),
+            "sslmode": os.getenv("DB_SSLMODE", "require")
         }
 
     def get_connection(self):

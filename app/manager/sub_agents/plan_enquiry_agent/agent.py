@@ -1,13 +1,14 @@
 from google.adk.agents import Agent
 from config.customer_service_tools import CustomerServiceTools
 import os
+from dotenv import load_dotenv
 # Initialize the tools
 tools = CustomerServiceTools()
 
 # Create the subscription agent
 plan_enquiry_agent = Agent(
     name="plan_enquiry_agent",
-    model="gemini-2.0-flash-exp",#"gemini-2.0-flash",
+    model=os.getenv("LLM_MODEL"),
     description="Plan enquiry agent for Airtel telecom",
     instruction="""
     You are the subscription agent for Airtel network provider.
