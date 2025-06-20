@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 # from .sub_agents.subscription_agent.agent import subscription_agent
 from .sub_agents.plan_enquiry_agent.agent import plan_enquiry_agent
 from .sub_agents.tech_support_agent.agent import tech_support_agent
+from .sub_agents.faq_agent.agent import faq_agent
 
 from datetime import datetime
 
@@ -71,6 +72,12 @@ coordinator_agent = Agent(
        - Provide information about previous raised complaints
        - Create new complaint on behalf of the user
        - Update/chaneg a complaint(ticket) status
+    
+    3. FAQ Agent:
+        - For general questions about Airtel services and policies
+       - Handles common customer questions using the Airtel FAQ database
+       - Use this agent for general information queries
+   
 
     Tailor your responses based on the customer's information and previous interactions.
     Always When the customer hasn't been identified yet, ask for their phone number or email to look them up.
@@ -84,7 +91,7 @@ coordinator_agent = Agent(
     ask clarifying questions to better understand the customer's needs.
 
     """,
-    sub_agents=[plan_enquiry_agent, tech_support_agent],
+    sub_agents=[plan_enquiry_agent, tech_support_agent,faq_agent],
     tools=[
         #tools.find_customer_by_phone,
         #tools.find_customer_by_email,
