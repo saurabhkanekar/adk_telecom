@@ -248,6 +248,17 @@ async def process_agent_response_async(runner, customer_id: str, session_id: str
 # ===== FASTAPI APP =====
 app = FastAPI(title="Airtel Customer Support Chat")
 
+# Add this import at the top of chat_server.py
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # For production, specify exact origins instead of "*"
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Serve static files if needed
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 
