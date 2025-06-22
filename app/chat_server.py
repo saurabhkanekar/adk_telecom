@@ -16,6 +16,13 @@ from google.genai import types
 from manager.agent import coordinator_agent
 from setup_state import set_state_info
 
+from fastapi import  Depends
+from typing import Optional
+from config.database_config import DatabaseConfig  # Update with your actual module
+from fastapi.responses import JSONResponse
+
+db = DatabaseConfig()
+
 # Load environment variables
 load_dotenv()
 
@@ -484,12 +491,6 @@ async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "service": "Airtel Customer Support Chat"}
 
-from fastapi import  Depends
-from typing import Optional
-from config.database_config import DatabaseConfig  # Update with your actual module
-from fastapi.responses import JSONResponse
-
-db = DatabaseConfig()
 
 @app.get("/conversation_analytics")
 def fetch_conversation_analytics(

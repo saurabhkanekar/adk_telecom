@@ -11,4 +11,6 @@ COPY app/ ./app/
 # Environment variables for CORS configuration
 #ENV CORS_ORIGINS="https://your-frontend-domain.com,https://another-domain.com"
 
-CMD ["uvicorn", "app.chat_server:app", "--host", "0.0.0.0", "--port", "8000"]
+#CMD ["uvicorn", "app.chat_server:app", "--host", "0.0.0.0", "--port", "8000"]
+
+CMD ["sh", "-c", "uvicorn app.chat_server:app --host 0.0.0.0 --port ${PORT:-8000}"]

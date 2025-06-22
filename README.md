@@ -20,20 +20,25 @@ This example implements a customer service system for an Airtel network provider
 ## Project Structure
 
 ```
-8-stateful-multi-agent-cxo/
+app/
 │
-├── coordinator_agent/           # Main agent package
+├── manager/           # Main agent package
 │   ├── __init__.py              # Required for Python package
 │   ├── agent.py                 # Root coordinator agent definition
 │   └── sub_agents/              # Specialized agents
 │       ├── billing_agent/       # Handles billing and invoice queries
 │       └── subscription_agent/  # Manages subscription and plan queries
-│
+├       └── faq_agents/              # rag agents    
+│       ├── tech_support_agent/       # Handles tech support queries
+│       └── subscription_agent/  # Manages subscription and plan queries
+|        
 ├── config/                      # Configuration files
 │   ├── database_config.py       # Database configuration
 │   └── customer_service_tools.py # Tools for customer service
 │
-├── main.py                      # Application entry point with session setup
+├── main.py                      # (deprecated- non functional)
+├── main_old.py                  # Application entry point with session setup(Terminal)
+├── chat_server.py              # Application entry point with session setup (Web)
 ├── utils.py                     # Helper functions for state management
 └── README.md                    # This documentation
 ```
@@ -143,7 +148,7 @@ GOOGLE_API_KEY=your_api_key_here
 To run the stateful multi-agent example:
 
 ```bash
-python main.py
+uvicorn chat_server:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 This will:
