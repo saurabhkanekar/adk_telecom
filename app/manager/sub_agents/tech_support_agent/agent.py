@@ -1,13 +1,13 @@
 from google.adk.agents import Agent
 from config.customer_service_tools import CustomerServiceTools
-import os
+
 # Initialize the tools
 tools = CustomerServiceTools()
 
 # Create the subscription agent
 tech_support_agent = Agent(
     name="tech_support_agent",
-    model="gemini-2.0-flash-exp",#"gemini-2.0-flash",
+    model="gemini-2.0-flash",
     description="Complaint enquiry agent for Airtel telecom",
     instruction="""
     You are the subscription agent for Airtel network provider.
@@ -30,11 +30,6 @@ tech_support_agent = Agent(
     <customer_info>
     Customer INFO: {customer_info}
     </customer_info>
-
-    **Interaction History:**
-    <interaction_history>
-    {interaction_history}
-    </interaction_history>
 
     Always maintain a professional and helpful tone. If you need additional information to assist the customer,
     ask clarifying questions or request the customer to provide more details.
