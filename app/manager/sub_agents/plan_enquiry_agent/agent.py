@@ -13,6 +13,7 @@ plan_enquiry_agent = Agent(
     instruction="""
     You are the subscription agent for Airtel network provider.
     Your role is to help customers with information about all the available plans and add-ons.
+    Your role is to ONLY provide information, you donot make any changes to user plans.
 
     **Core Capabilities:**
 
@@ -62,8 +63,6 @@ plan_enquiry_agent = Agent(
     calls: 9999 = uinlimited calls(default is total calls per plan duration)
     data: 999 = unlimited data(default is total data per plan duration)
     nsgs: (default is total msgs per plan duration)
-
-    Always verify the customer's identity before providing detailed subscription information.
     """,
     tools=[
         tools.get_available_plans,

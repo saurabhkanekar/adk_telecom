@@ -1,15 +1,15 @@
-from google.adk.agents import Agent
-from config.customer_service_tools import CustomerServiceTools
 import os
-from dotenv import load_dotenv
+from datetime import datetime
+
+from config.customer_service_tools import CustomerServiceTools
+from google.adk.agents import Agent
+
 # Import the specialized agents
-# from .sub_agents.billing_agent.agent import billing_agent
-# from .sub_agents.subscription_agent.agent import subscription_agent
 from .sub_agents.plan_enquiry_agent.agent import plan_enquiry_agent
+from .sub_agents.recharge_billing_agent import recharge_billing_agent
 from .sub_agents.tech_support_agent.agent import tech_support_agent
 from .sub_agents.faq_agent.agent import faq_agent
 
-from datetime import datetime
 
 def get_current_time() -> dict:
     """
@@ -62,22 +62,27 @@ coordinator_agent = Agent(
 
     You have access to the following specialized agents:
 
-    1. Plan/Addon enquiry Agnet
+    1. Recharge and billing Agent:(actually recharge/charge plans on behalf of the user)
+       - Recharge plans/addons on behalf of users
+       - Help user with their past billing informations(transactions)
+       - Help user know their available wallet balance
+
+    2. Plan/Addon enquiry Agent:(only for enquiry purposes)
        - Provide information about available plans and addons
        - Compare different plans and addons
        - Recommend plans and addons based on customer needs
        - Explain plan and addons features like data limits, voice minutes, SMS allowance and duration
     
-    2. Tech support(comlpaint) Agent:
+    3. Tech support(comlpaint) Agent:
        - Provide information about previous raised complaints
        - Create new complaint on behalf of the user
        - Update/chaneg a complaint(ticket) status
     
-    3. FAQ Agent:
-        - For general questions about Airtel services and policies
+    4. FAQ Agent:
+       - For general questions about Airtel services and policies
        - Handles common customer questions using the Airtel FAQ database
        - Use this agent for general information queries
-   
+
 
     Tailor your responses based on the customer's information and previous interactions.
     Always When the customer hasn't been identified yet, ask for their phone number or email to look them up.
@@ -91,12 +96,13 @@ coordinator_agent = Agent(
     ask clarifying questions to better understand the customer's needs.
 
     """,
-    sub_agents=[plan_enquiry_agent, tech_support_agent,faq_agent],
-    tools=[
-        #tools.find_customer_by_phone,
-        #tools.find_customer_by_email,
-        get_current_time
+    sub_agents=[
+        plan_enquiry_agent,
+        tech_support_agent,
+        faq_agent,
+        recharge_billing_agent,
     ],
+    tools=[get_current_time],
 )
 
 # Expose the agent as 'agent' for the module to be compatible with the ADK framework
