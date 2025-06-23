@@ -27,7 +27,7 @@ db = DatabaseConfig()
 load_dotenv()
 
 # ===== CONSTANTS =====
-APP_NAME = "Airtel Customer Support"
+APP_NAME = " Customer Support"
 
 # ===== INITIAL STATE TEMPLATE =====
 __initial_state = {
@@ -253,7 +253,7 @@ async def process_agent_response_async(runner, customer_id: str, session_id: str
 
 
 # ===== FASTAPI APP =====
-app = FastAPI(title="Airtel Customer Support Chat")
+app = FastAPI(title="NexTel Customer Support Chat")
 
 # Add this import at the top of chat_server.py
 from fastapi.middleware.cors import CORSMiddleware
@@ -276,7 +276,7 @@ async def get_chat_page():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Airtel Customer Support</title>
+        <title>NexTel Customer Support</title>
         <style>
             body { font-family: Arial, sans-serif; margin: 40px; }
             .chat-container { max-width: 800px; margin: 0 auto; }
@@ -292,7 +292,7 @@ async def get_chat_page():
     </head>
     <body>
         <div class="chat-container">
-            <h1>🛜 Airtel Customer Support Chat</h1>
+            <h1>🛜 NexTel Customer Support Chat</h1>
             
             <div class="connection-info">
                 <h3>Connect to Chat</h3>
@@ -489,7 +489,7 @@ async def list_active_sessions():
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
-    return {"status": "healthy", "service": "Airtel Customer Support Chat"}
+    return {"status": "healthy", "service": "NexTel Customer Support Chat"}
 
 
 @app.get("/conversation_analytics")
