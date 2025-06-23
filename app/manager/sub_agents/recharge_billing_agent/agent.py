@@ -7,7 +7,7 @@ tools = CustomerServiceTools()
 # Create the subscription agent
 recharge_billing_agent = Agent(
     name="recharge_billing_agent",
-    model="gemini-2.0-flash",
+    model=os.getenv("LLM_MODEL"),
     description="Recharge and billing agent for Airtel telecom",
     instruction="""
     You are the reccharge and billing agent for Airtel network provider.
