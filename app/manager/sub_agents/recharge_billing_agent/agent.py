@@ -1,5 +1,6 @@
 from google.adk.agents import Agent
 from config.customer_service_tools import CustomerServiceTools
+import os
 
 # Initialize the tools
 tools = CustomerServiceTools()
@@ -7,10 +8,10 @@ tools = CustomerServiceTools()
 # Create the subscription agent
 recharge_billing_agent = Agent(
     name="recharge_billing_agent",
-    model="gemini-2.0-flash",
-    description="Recharge and billing agent for Airtel telecom",
+    model=os.getenv("LLM_MODEL"),
+    description="Recharge and billing agent for NexTel telecom",
     instruction="""
-    You are the reccharge and billing agent for Airtel network provider.
+    You are the reccharge and billing agent for NexTel network provider.
     Your role is to help customers with plan/addon recharges(add recharge on behalf of users), checking wallet balance and providing billing informations.
 
     **Core Capabilities:**

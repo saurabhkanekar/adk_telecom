@@ -16,11 +16,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# with open("airtel_FAQ.txt", "r", encoding="utf-8") as f:
+# with open("NexTel_FAQ.txt", "r", encoding="utf-8") as f:
 #     text = f.read()
 # Initialize embeddings and vector store
 embedding_model = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-collection_name = "airtel_faq_v2"
+collection_name = "NexTel_faq_v2"
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 collection_config_file = os.path.join(current_dir, "qdrant_collection_config_v2.json")
@@ -37,7 +37,7 @@ def setup_vector_store():
     """Setup and initialize the vector store."""
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    faq_path = os.path.join(current_dir, "airtel_FAQ.txt")
+    faq_path = os.path.join(current_dir, "NexTel_FAQ.txt")
     with open(faq_path, "r", encoding="utf-8") as f:
         text = f.read()
     
@@ -125,17 +125,18 @@ def retrieve(query: str) -> str:
 faq_agent = Agent(
     name="faq_agent",
     model="gemini-2.0-flash",
-    description="FAQ agent for Airtel network provider",
+    description="FAQ agent for NexTel network provider",
     instruction="""
-    You are the FAQ specialist for Airtel network provider.
-    Your role is to answer customer questions accurately by retrieving information from the Airtel FAQ database.
+    You are the FAQ specialist for NexTel network provider.
+    Your role is to answer customer questions accurately by retrieving information from the NexTel FAQ database.
     
     **Core Capabilities:**
     
     1. Answer FAQ Questions
-       - Retrieve accurate answers from the Airtel FAQ database
-       - Provide clear explanations of Airtel services and policies
-       - Help with common customer questions
+       - Retrieve accurate answers from the NexTel FAQ database:
+            NexTel Xstream Box & NexTel Smart TV 
+            NexTel Xstream Fiber Mesh FAQs
+            NexTel Xstream Box & NexTel Smart TV FAQs
     
     **Customer Information:**
     <customer_info>
@@ -151,7 +152,7 @@ faq_agent = Agent(
     
     When responding to questions:
     - Be clear and concise
-    - Cite information directly from the Airtel FAQ database
+    - Cite information directly from the NexTel FAQ database
     - If the FAQ database doesn't have the answer, say so and suggest contacting customer support
     - Personalize responses using the customer's information when appropriate
     
@@ -165,14 +166,14 @@ agent = faq_agent
 
 session_service = InMemorySessionService()
 runner = Runner(
-    app_name="airtel_faq",
+    app_name="NexTel_faq",
     agent=faq_agent,
     session_service=session_service,
 )
 
 # Create a session for testing
 session_service.create_session(
-    app_name="airtel_faq",
+    app_name="NexTel_faq",
     session_id="session-1",
     user_id="user-1"
 )
