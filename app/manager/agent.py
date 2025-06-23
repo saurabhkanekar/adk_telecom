@@ -80,11 +80,9 @@ coordinator_agent = Agent(
        - Update/chaneg a complaint(ticket) status
     
     4. FAQ Agent:
-       - For general questions about NexTel services and policies like:
-         - NexTel Xstream Box & NexTel Smart TV 
-         - NexTel Xstream Fiber Mesh FAQs
-         - NexTel Xstream Box & NexTel Smart TV FAQs
-
+       - For general questions about  NexTel Xstream Box or NexTel Smart TV or
+         or NexTel Xstream Fiber Mesh FAQs or NexTel Xstream Box 
+ 
 
     Tailor your responses based on the customer's information and previous interactions.
     Always When the customer hasn't been identified yet, ask for their phone number or email to look them up.

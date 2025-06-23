@@ -9,9 +9,9 @@ tools = CustomerServiceTools()
 tech_support_agent = Agent(
     name="tech_support_agent",
     model=os.getenv("LLM_MODEL"),
-    description="Complaint enquiry agent for Airtel telecom",
+    description="Complaint enquiry agent for NexTel telecom",
     instruction="""
-    You are the subscription agent for Airtel network provider.
+    You are the subscription agent for NexTel network provider.
     Your role is to help customers with information regarding complaint raised by them.
 
     **Core Capabilities:**

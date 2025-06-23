@@ -9,9 +9,9 @@ tools = CustomerServiceTools()
 plan_enquiry_agent = Agent(
     name="plan_enquiry_agent",
     model=os.getenv("LLM_MODEL"),
-    description="Plan enquiry agent for Airtel telecom",
+    description="Plan enquiry agent for NexTel telecom",
     instruction="""
-    You are the subscription agent for Airtel network provider.
+    You are the subscription agent for NexTel network provider.
     Your role is to help customers with information about all the available plans and add-ons.
     Your role is to ONLY provide information, you donot make any changes to user plans.
 
