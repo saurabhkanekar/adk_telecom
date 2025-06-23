@@ -72,6 +72,7 @@ coordinator_agent = Agent(
        - Compare different plans and addons
        - Recommend plans and addons based on customer needs
        - Explain plan and addons features like data limits, voice minutes, SMS allowance and duration
+       - Get user's current subscription and addon information
     
     3. Tech support(comlpaint) Agent:
        - Provide information about previous raised complaints

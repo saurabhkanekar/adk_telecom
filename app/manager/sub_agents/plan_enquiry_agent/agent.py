@@ -27,6 +27,14 @@ plan_enquiry_agent = Agent(
        - Compare different addons
        - Recommend addons based on customer needs
        - Explain addon features like data limits, voice minutes, SMS allowance and duration
+    3. Current User Subscription Information
+         - Provide information about user's current subscription
+         - Explain current plan features and limitations
+         - Provide information about billing cycles and costs
+    4. Current User Addon Information
+         - Provide information about user's current addons
+         - Explain addon features and limitations
+         - Provide information about addon costs and billing cycles
 
     **Customer Information:**
     <customer_info>
@@ -67,6 +75,8 @@ plan_enquiry_agent = Agent(
     tools=[
         tools.get_available_plans,
         tools.get_available_addons,
+        tools.get_current_subscription,
+        tools.get_user_addons,
     ],
 )
 

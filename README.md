@@ -26,19 +26,16 @@ app/
 │   ├── __init__.py              # Required for Python package
 │   ├── agent.py                 # Root coordinator agent definition
 │   └── sub_agents/              # Specialized agents
-│       ├── billing_agent/       # Handles billing and invoice queries
-│       └── subscription_agent/  # Manages subscription and plan queries
-├       └── faq_agents/              # rag agents    
+│       ├── recharge_billing_agent/   # Handles recharge, billing and invoice queries
+├       └── faq_agents/               # rag agents    
 │       ├── tech_support_agent/       # Handles tech support queries
-│       └── subscription_agent/  # Manages subscription and plan queries
+│       └── plan_enquiry_agent/       # Handles plan, addon related enquiry
 |        
-├── config/                      # Configuration files
-│   ├── database_config.py       # Database configuration
+├── config/                       # Configuration files
+│   ├── database_config.py        # Database configuration
 │   └── customer_service_tools.py # Tools for customer service
 │
-├── main.py                      # (deprecated- non functional)
-├── main_old.py                  # Application entry point with session setup(Terminal)
-├── chat_server.py              # Application entry point with session setup (Web)
+├── chat_server.py               # Application entry point with session setup (Web)
 ├── utils.py                     # Helper functions for state management
 └── README.md                    # This documentation
 ```

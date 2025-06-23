@@ -551,3 +551,27 @@ class CustomerServiceTools:
         wallet = wallet["data"][0]
         balance = float(wallet["balance"])
         return f"Wallet balance for user {user_id} is ₹{balance:.2f}."
+
+    def get_user_addons(self, user_id: int) -> List[Dict[str, Any]]:
+        """
+        Fetches all active addons for a user.
+
+        Args:
+            user_id (int): ID of the user.
+
+        Returns:
+            List of active addons with details.
+        """
+        query = """
+        SELECT 
+            ua.addon_id,
+            a.addon_type,
+            a.price,
+            ua.added_on,
+            ua.expiry_date
+        FROM user_addons ua
+        JOIN addons a ON ua.addon_id = a.addon_id
+        WHERE ua.user_id = %s AND ua.expiry_date > CURRENT_DATE
+        ORDER BY ua.added_on DESC
+        """
+        return str(self.db.execute_query(query, (user_id,))["data"])
