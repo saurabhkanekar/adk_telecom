@@ -20,10 +20,10 @@ load_dotenv()
 #     text = f.read()
 # Initialize embeddings and vector store
 embedding_model = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-collection_name = "NexTel_faq_v2"
+collection_name = "NexTel_faq_v3"
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-collection_config_file = os.path.join(current_dir, "qdrant_collection_config_v2.json")
+collection_config_file = os.path.join(current_dir, "qdrant_collection_config_v3.json")
 
 # collection_config_file = "qdrant_collection_config_v2.json"
 
