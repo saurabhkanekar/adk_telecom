@@ -1,6 +1,6 @@
-# Stateful Multi-Agent System for Airtel Network Provider
+# Stateful Multi-Agent System for NexTel Network Provider
 
-This example demonstrates how to create a stateful multi-agent system for an Airtel network provider customer support service, combining the power of persistent state management with specialized agent delegation. This approach creates intelligent agent systems that remember customer information across interactions while leveraging specialized domain expertise.
+This example demonstrates how to create a stateful multi-agent system for an NexTel network provider customer support service, combining the power of persistent state management with specialized agent delegation. This approach creates intelligent agent systems that remember customer information across interactions while leveraging specialized domain expertise.
 
 ## What is a Stateful Multi-Agent System?
 
@@ -15,25 +15,27 @@ The result is a sophisticated agent ecosystem that can:
 - Provide personalized responses based on past interactions
 - Maintain context across multiple agent delegates
 
-This example implements a customer service system for an Airtel network provider, where specialized agents handle different aspects of customer support while sharing a common state.
+This example implements a customer service system for an NexTel network provider, where specialized agents handle different aspects of customer support while sharing a common state.
 
 ## Project Structure
 
 ```
-8-stateful-multi-agent-cxo/
+app/
 │
-├── coordinator_agent/           # Main agent package
+├── manager/           # Main agent package
 │   ├── __init__.py              # Required for Python package
 │   ├── agent.py                 # Root coordinator agent definition
 │   └── sub_agents/              # Specialized agents
-│       ├── billing_agent/       # Handles billing and invoice queries
-│       └── subscription_agent/  # Manages subscription and plan queries
-│
-├── config/                      # Configuration files
-│   ├── database_config.py       # Database configuration
+│       ├── recharge_billing_agent/   # Handles recharge, billing and invoice queries
+├       └── faq_agents/               # rag agents    
+│       ├── tech_support_agent/       # Handles tech support queries
+│       └── plan_enquiry_agent/       # Handles plan, addon related enquiry
+|        
+├── config/                       # Configuration files
+│   ├── database_config.py        # Database configuration
 │   └── customer_service_tools.py # Tools for customer service
 │
-├── main.py                      # Application entry point with session setup
+├── chat_server.py               # Application entry point with session setup (Web)
 ├── utils.py                     # Helper functions for state management
 └── README.md                    # This documentation
 ```
@@ -80,19 +82,15 @@ The coordinator agent routes queries to specialized sub-agents:
 coordinator_agent = Agent(
     name="coordinator_agent",
     model="gemini-2.0-flash",
-    description="Coordinator agent for Airtel network provider",
+    description="Coordinator agent for NexTel network provider",
     instruction="""
-    You are the primary coordinator agent for Airtel network provider customer service.
+    You are the primary coordinator agent for NexTel network provider customer service.
     Your role is to help customers with their queries and direct them to the appropriate specialized agent.
     
     # ... detailed instructions ...
     
     """,
     sub_agents=[billing_agent, subscription_agent],
-    tools=[
-        tools.find_customer_by_phone,
-        tools.find_customer_by_email
-    ],
 )
 ```
 
@@ -143,7 +141,7 @@ GOOGLE_API_KEY=your_api_key_here
 To run the stateful multi-agent example:
 
 ```bash
-python main.py
+uvicorn chat_server:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 This will:
@@ -216,5 +214,24 @@ For a production implementation, consider:
 
 # run
 - web- adk web
-- Fastapi - localhost/docs - adk api_server 
-- terminal adk run multi_tool_agent 
+- Fastapi 
+```
+cd app:
+uvicorn chat_server:app --reload --host 0.0.0.0 --port 8000
+```
+
+
+
+# usage credentials:
+**customer login :**
+ 
+-  9765822200 
+-  9765822201
+-  9765822202
+ 
+otp -1234
+ 
+**Admin login :**
+ 
+username: admin
+passwd: admin123

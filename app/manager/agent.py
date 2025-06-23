@@ -1,11 +1,14 @@
-from google.adk.agents import Agent
+import os
+from datetime import datetime
+
 from config.customer_service_tools import CustomerServiceTools
+from google.adk.agents import Agent
 
 # Import the specialized agents
-from .sub_agents.billing_agent.agent import billing_agent
-from .sub_agents.subscription_agent.agent import subscription_agent
-
-from datetime import datetime
+from .sub_agents.plan_enquiry_agent.agent import plan_enquiry_agent
+from .sub_agents.recharge_billing_agent import recharge_billing_agent
+from .sub_agents.tech_support_agent.agent import tech_support_agent
+from .sub_agents.faq_agent.agent import faq_agent
 
 
 def get_current_time() -> dict:
@@ -23,10 +26,10 @@ tools = CustomerServiceTools()
 # Create the coordinator agent
 coordinator_agent = Agent(
     name="coordinator_agent",
-    model="gemini-2.0-flash",
-    description="Coordinator agent for Airtel network provider",
+    model=os.getenv("LLM_MODEL"),
+    description="Coordinator agent for NexTel network provider",
     instruction="""
-    You are the primary coordinator agent for Airtel network provider customer service.
+    You are the primary coordinator agent for NexTel network provider customer service.
     Your role is to help customers with their queries and direct them to the appropriate specialized agent.
 
     **Core Capabilities:**
@@ -44,15 +47,12 @@ coordinator_agent = Agent(
 
     **Customer Information:**
     <customer_info>
-    Customer ID: {customer_info.customer_id}
-    Name: {customer_info.first_name} {customer_info.last_name}
-    Email: {customer_info.email}
-    Phone: {customer_info.phone}
+    Customer info: {customer_info}
     </customer_info>
 
-    **Subscription Information:**
+    **User Current Subscription Information:**
     <subscription_info>
-    Plan ID: {plan_id}
+    Current plan info: {plan_details} 
     </subscription_info>
 
     **Interaction History:**
@@ -62,15 +62,27 @@ coordinator_agent = Agent(
 
     You have access to the following specialized agents:
 
-    1. Billing Agent
-       - For questions about invoices, payments, and billing-related issues
-       - Direct billing-related queries here
-       - This agent can provide invoice details and payment history
+    1. Recharge and billing Agent:(actually recharge/charge plans on behalf of the user)
+       - Recharge plans/addons on behalf of users
+       - Help user with their past billing informations(transactions)
+       - Help user know their available wallet balance
 
-    2. Subscription Agent
-       - For questions about plans, subscriptions, and plan features
-       - Handles plan inquiries and recommendations
-       - This agent can provide subscription details and available plans
+    2. Plan/Addon enquiry Agent:(only for enquiry purposes)
+       - Provide information about available plans and addons
+       - Compare different plans and addons
+       - Recommend plans and addons based on customer needs
+       - Explain plan and addons features like data limits, voice minutes, SMS allowance and duration
+       - Get user's current subscription and addon information
+    
+    3. Tech support(comlpaint) Agent:
+       - Provide information about previous raised complaints
+       - Create new complaint on behalf of the user
+       - Update/chaneg a complaint(ticket) status
+    
+    4. FAQ Agent:
+       - For general questions about  NexTel Xstream Box or NexTel Smart TV or
+         or NexTel Xstream Fiber Mesh FAQs or NexTel Xstream Box 
+ 
 
     Tailor your responses based on the customer's information and previous interactions.
     Always When the customer hasn't been identified yet, ask for their phone number or email to look them up.
@@ -84,12 +96,13 @@ coordinator_agent = Agent(
     ask clarifying questions to better understand the customer's needs.
 
     """,
-    sub_agents=[billing_agent, subscription_agent],
-    tools=[
-        #tools.find_customer_by_phone,
-        #tools.find_customer_by_email,
-        get_current_time
+    sub_agents=[
+        plan_enquiry_agent,
+        tech_support_agent,
+        faq_agent,
+        recharge_billing_agent,
     ],
+    tools=[get_current_time],
 )
 
 # Expose the agent as 'agent' for the module to be compatible with the ADK framework
