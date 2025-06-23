@@ -29,6 +29,8 @@ recharge_billing_agent = Agent(
        - Help user know their availble wallet balance with last updated date
     5. plan enquiry
        - Help yourself with the plans available to better assist the user
+    6. addon enquiry
+       - Help yourself with the addons available to better assist the user
 
     **Customer Information:**
     <customer_info>
