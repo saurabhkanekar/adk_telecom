@@ -206,7 +206,7 @@ def initialize_chat_session(customer_id: str) -> str:
     return session_id
 
 
-async def process_agent_response_async(runner, customer_id: str, session_id: str, query: str) -> Optional[str]:
+async def process_agent_response_async(runner, customer_id: str, session_id: str, query: str, websocket: WebSocket) -> Optional[str]:
     """Process agent response asynchronously (similar to call_agent_async from utils.py)."""
     content = types.Content(role="user", parts=[types.Part(text=query)])
     print(f"\n🔄 Processing Query: {query}")
@@ -223,6 +223,13 @@ async def process_agent_response_async(runner, customer_id: str, session_id: str
         ):
             if event.author:
                 agent_name = event.author
+                await websocket.send_text(json.dumps({
+                        "type": "processing_agent",
+                        "agent_name": agent_name
+                    }))
+
+                if event.actions and event.actions.transfer_to_agent:
+                    print("🔥 Captured transfer-to:", event.actions.transfer_to_agent)
 
             if event.is_final_response():
                 if (
@@ -439,7 +446,7 @@ async def websocket_chat(websocket: WebSocket, customer_id: str):
                 
                 # Process with agent
                 agent_response = await process_agent_response_async(
-                    runner, customer_id, session_id, user_message
+                    runner, customer_id, session_id, user_message, websocket
                 )
                 
                 # Send response back
@@ -520,6 +527,14 @@ def fetch_conversation_analytics(
         return JSONResponse(status_code=500, content={"error": result["error"]})
 
     return result
+
+# Callback hook
+def on_before_response(callback_context):
+    agent_name = callback_context.actions.transfer_to_agent
+    if agent_name:
+        print("Coordinator is transferring to:", agent_name)
+    # Return None to continue the chain normally
+    return None
 
 
 if __name__ == "__main__":
