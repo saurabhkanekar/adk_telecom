@@ -61,6 +61,7 @@ const Chatbot = () => {
       } else if (data.type === "processing_agent") {
         setIsTyping(true);
 
+        // transfer to agent
         const agentName = data.agent_name?.trim();
         const text = agentName
           ? `transferring to ${agentName}`
