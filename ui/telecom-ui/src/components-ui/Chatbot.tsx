@@ -8,6 +8,8 @@ const apiBaseUrl = import.meta.env.VITE_BASE_URL;
 type Message = {
   from: "user" | "bot" | "system";
   text: string;
+  type?: "agent_response" | "processing_agent" | "session_info" | "error"; // Optional type property
+  agent_name?: string;
 };
 
 const Chatbot = () => {
@@ -51,22 +53,36 @@ const Chatbot = () => {
 
       if (data.type === "agent_response") {
         setIsTyping(false);
-        setMessages((prev) => [...prev, { from: "bot", text: data.message }]);
+        setMessages((prev) => [
+          // Remove all "processing_agent" messages
+          ...prev.filter((msg) => msg.type !== "processing_agent"),
+          { from: "bot", text: data.message },
+        ]);
+      } else if (data.type === "processing_agent") {
+        setIsTyping(true);
+
+        // transfer to agent
+        const agentName = data.agent_name?.trim();
+        const text = agentName
+          ? `transferring to ${agentName}`
+          : "transferring to agent";
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            from: "bot",
+            text,
+            type: "processing_agent",
+            agent_name: agentName,
+          },
+        ]);
       } else if (data.type === "session_info") {
         sessionStorage.setItem("customerId", data.customer_id);
-        // setMessages((prev) => [
-        //   ...prev,
-        //   {
-        //     from: "system",
-        //     text: ``,
-        //   },
-        //   { from: "system", text: `` },
-        // ]);
       } else if (data.type === "error") {
-        // setMessages((prev) => [
-        //   ...prev,
-        //   { from: "system", text: ` ${data.message}` },
-        // ]);
+        setMessages((prev) => [
+          ...prev,
+          { from: "system", text: `${data.message}` },
+        ]);
       }
     };
 
@@ -152,9 +168,9 @@ const Chatbot = () => {
                 bg={
                   msg.from === "user"
                     ? "linear-gradient(to right, #b272f1, #b273ef)"
-                    : msg.from === "bot"
-                    ? "#dfdfe4" // dark gray for bot messages
-                    : "#f5f5f5" // Light gray for system messages
+                    : msg.from === "bot" && msg.type !== "processing_agent"
+                    ? "#dfdfe4"
+                    : "transparent"
                 }
                 color={msg.from === "user" ? "white" : "gray.900"} // White text for user messages
               >
@@ -179,10 +195,17 @@ const Chatbot = () => {
               alignItems="center"
               gap="6px"
             >
-              {/* Agent is typing <span className="dots">...</span> */}
-              <Box className="typing-dot" />
-              <Box className="typing-dot" />
-              <Box className="typing-dot" />
+              {messages[messages.length - 1]?.type === "processing_agent" ? (
+                <Text color="gray.700" fontStyle="italic">
+                  {messages[messages.length - 1]?.text}
+                </Text>
+              ) : (
+                <>
+                  <Box className="typing-dot" />
+                  <Box className="typing-dot" />
+                  <Box className="typing-dot" />
+                </>
+              )}
             </Box>
           </Flex>
         )}
